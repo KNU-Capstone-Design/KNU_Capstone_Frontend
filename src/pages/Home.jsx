@@ -17,7 +17,7 @@ function Home() {
                         <p className={styles.description}>
                         핵심 기술 질문에 직접 답해보세요.<br />
                         AI가 꼼꼼하게 해석해드릴게요.<br />
-                        출퇴근길, 틈새시간에 실력 쌓기!
+                        출퇴근길, 틈새시간에 실력 쌓기!!
                         </p>
                         <div className={styles.ctaButtonWrapper}>
                             <SubscribeButton />
