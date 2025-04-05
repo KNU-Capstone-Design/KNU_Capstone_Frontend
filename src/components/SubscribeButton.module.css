@@ -1,0 +1,15 @@
+.subscribeBtn {
+    padding: 12px 26px;
+    background-color: #5B9CFE;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 10px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+.subscribeBtn:hover {
+    background-color: #599bff;
+    transform: scale(1.05); /* 살짝 커지게 */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* 그림자 추가 */
+  }

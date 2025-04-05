@@ -1,0 +1,98 @@
+/* main */
+.mainContent {
+  margin-top: 80px;
+  height: calc(100vh - 80px); 
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #fff;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 왼쪽 텍스트 */
+.infoTxt {
+  flex: 1;
+  max-width: 600px;
+}
+
+.title {
+  font-size: 2.5rem;
+  font-weight: bold;
+  line-height: 1.4;
+  margin-bottom: 20px;
+  color: #111;
+}
+
+.description {
+  font-size: 1.1rem;
+  line-height: 1.6;
+  color: #000000;
+}
+
+/* 오른쪽 이미지 */
+.infoImage {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+}
+.phoneImage {
+  max-width: 80%;
+  margin-left: 100px;
+}
+body::-webkit-scrollbar {
+  display: none; /* Chrome, Safari */
+}
+
+@media (max-width: 768px) {
+  .mainContent {
+    flex-direction: column; /* 텍스트 → 이미지 순 */
+    height: auto;
+    margin-top: 60px;
+    padding: 40px 20px 60px;
+    overflow: visible;
+    text-align: center;
+  }
+
+  .container {
+    flex-direction: column;
+    padding: 0;
+  }
+
+  .infoTxt {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .description {
+    font-size: 1rem;
+  }
+
+  .ctaButtonWrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+
+  .infoImage {
+    justify-content: center;
+    margin: 0;
+  }
+
+  .phoneImage {
+    width: 80%;
+    max-width: 500px;
+    margin: 0 auto;
+  }
+}
