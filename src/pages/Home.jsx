@@ -2,12 +2,19 @@ import phoneImage from '../assets/phone.png';
 import SubscribeButton from '../components/SubscribeButton';
 import Navbar from '../components/Navbar';
 import styles from './Home.module.css';
-
+import SubscribeForm from '../components/SubscribeForm';
+import {useState} from "react";
 function Home() {
+
+    const [isFormOpen, setIsFormOpen] = useState(false);
+
+    const openForm = () => setIsFormOpen(true);
+    const closeForm = () => setIsFormOpen(false);
+
     return (
         <>
             {/* Navbar */}
-            <Navbar />
+            <Navbar onSubscribeClick={openForm} />
 
             {/* Main Content */}
             <main className={styles.mainContent}>
@@ -20,7 +27,8 @@ function Home() {
                         출퇴근길, 틈새시간에 실력 쌓기!!
                         </p>
                         <div className={styles.ctaButtonWrapper}>
-                            <SubscribeButton />
+                            <SubscribeButton onClick={openForm} />
+                            {isFormOpen && <SubscribeForm onCancel={closeForm} />}
                         </div>
                     </div>
 

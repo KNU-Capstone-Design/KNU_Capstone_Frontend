@@ -2,7 +2,7 @@ import styles from './Navbar.module.css';
 import logoImage from '../assets/logo.png';
 import SubscribeButton from './SubscribeButton';
 
-function Navbar({ showSubscribe = true }) {
+function Navbar({ showSubscribe = true, onSubscribeClick}) {
     return (
       <nav className={styles.navbar}>
         <div className={styles.navContent}>
@@ -12,7 +12,7 @@ function Navbar({ showSubscribe = true }) {
   
           {showSubscribe && (
             <div className={styles.navSubscribeBtn}>
-              <SubscribeButton />
+              <SubscribeButton onClick={onSubscribeClick}/>
             </div>
           )}
         </div>
