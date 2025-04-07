@@ -10,12 +10,20 @@ function SubscribeForm({ onCancel }) {
     const [fieldError, setFieldError] = useState('');
 
     const toggleField = (field) => {
-        setSelected((prev) =>
-            prev.includes(field)
-                ? prev.filter((f) => f !== field)
-                : [...prev, field]
-        );
+        setSelected((prev) => {
+            const updated =
+                prev.includes(field)
+                    ? prev.filter((f) => f !== field)
+                    : [...prev, field];
+    
+            if (updated.length > 0) {
+                setFieldError('');
+            }
+    
+            return updated;
+        });
     };
+    
 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -33,26 +41,25 @@ function SubscribeForm({ onCancel }) {
     }, [email]);
 
     const handleSubmit = () => {
-        // 분야 선택 검사
-        if (selected.length === 0) {
+        const isEmailValid = validateEmail(email);
+        const isFieldValid = selected.length > 0;
+    
+        if (!isEmailValid) {
+            setEmailError('올바르지 않은 이메일 형식입니다.');
+        } else {
+            setEmailError('');
+        }
+    
+        if (!isFieldValid) {
             setFieldError('하나 이상의 분야를 선택해야 합니다.');
         } else {
             setFieldError('');
         }
-
-        // 이메일 검사
-        if (!validateEmail(email)) {
-            setEmailError('올바르지 않은 이메일 형식입니다.');
-        }
-        // 환영 알림
-        if (validateEmail(email) && selected.length > 0) {
+    
+        if (isEmailValid && isFieldValid) {
             alert('면도를 구독하셨습니다! 구독한 메일로 환영 메일을 보냈습니다!');
-        }
-        //팝업 닫기
-        onCancel();
-        
-        if (validateEmail(email) && selected.length > 0) {
             console.log('제출!', { email, selected });
+            onCancel(); 
         }
     };
 
