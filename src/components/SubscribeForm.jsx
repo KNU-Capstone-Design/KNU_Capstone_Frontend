@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import styles from './Subscribeform.module.css';
+import styles from './SubscribeForm.module.css';
 
 const fields = ['Android', 'iOS', 'Frontend', 'Backend'];
 
