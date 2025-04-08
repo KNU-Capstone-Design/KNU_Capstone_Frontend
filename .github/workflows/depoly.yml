@@ -1,3 +1,4 @@
+# 프론트엔드 자동 배포 환경 
 name: Deploy Code
 
 on:
@@ -26,5 +27,3 @@ jobs:
           npm run build
           cd ~
           docker-compose up -d nginx
-
-          
