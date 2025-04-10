@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import styles from './SubscribeForm.module.css';
+import { subscribeAPI } from '../api/subscribe.js';
 
 const fields = ['Android', 'iOS', 'Frontend', 'Backend'];
 
 function SubscribeForm({ onCancel }) {
-    const [selected, setSelected] = useState([]);
+    const [categories, setSelected] = useState([]);
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [fieldError, setFieldError] = useState('');
@@ -40,9 +41,10 @@ function SubscribeForm({ onCancel }) {
         }
     }, [email]);
 
-    const handleSubmit = () => {
+    const handleSubmit = async() => {
+        //console.log(import.meta.env.REACT_APP_BASEURL);
         const isEmailValid = validateEmail(email);
-        const isFieldValid = selected.length > 0;
+        const isFieldValid = categories.length > 0;
     
         if (!isEmailValid) {
             setEmailError('올바르지 않은 이메일 형식입니다.');
@@ -55,11 +57,27 @@ function SubscribeForm({ onCancel }) {
         } else {
             setFieldError('');
         }
+        
     
         if (isEmailValid && isFieldValid) {
-            alert('면도를 구독하셨습니다! 구독한 메일로 환영 메일을 보냈습니다!');
-            console.log('제출!', { email, selected });
-            onCancel(); 
+            try {
+                const response = await subscribeAPI.subscribe(email, categories);
+        
+                if (response.status === 409) {
+                    alert(response.data); // 또는 response.data.message 등 응답 구조에 맞게
+                } else if (response.status === 500) {
+                    alert(response.data);
+                } else {
+                    alert('면도를 구독하셨습니다! 구독한 메일로 환영 메일을 보냈습니다!');
+                }
+        
+                console.log('제출!', { email, categories });
+                onCancel();
+        
+            } catch (error) {
+                console.error('에러 발생:', error);
+                alert('서버 요청 중 오류가 발생했습니다.');
+            }
         }
     };
 
@@ -87,7 +105,7 @@ function SubscribeForm({ onCancel }) {
                         {fields.map((field) => (
                             <button
                                 key={field}
-                                className={`${styles.fieldBtn} ${selected.includes(field) ? styles.selected : ''}`}
+                                className={`${styles.fieldBtn} ${categories.includes(field) ? styles.categories : ''}`}
                                 onClick={() => toggleField(field)}
                             >
                                 {field}

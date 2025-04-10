@@ -73,7 +73,7 @@
   transform: scale(1.05);
 }
 
-.selected {
+.categories {
   background-color: #5B9CFE;
   color: white;
   font-weight: bold;;
