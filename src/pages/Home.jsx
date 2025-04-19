@@ -31,7 +31,6 @@ function Home() {
                             {isFormOpen && <SubscribeForm onCancel={closeForm} />}
                         </div>
                     </div>
-
                     <div className={styles.infoImage}>
                         <img src={phoneImage} alt="핸드폰 화면" className={styles.phoneImage} />
                     </div>
