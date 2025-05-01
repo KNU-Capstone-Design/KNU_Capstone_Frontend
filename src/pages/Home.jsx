@@ -4,12 +4,16 @@ import Navbar from '../components/Navbar';
 import styles from './Home.module.css';
 import SubscribeForm from '../components/SubscribeForm';
 import {useState} from "react";
-function Home() {
 
+function Home() {
     const [isFormOpen, setIsFormOpen] = useState(false);
 
     const openForm = () => setIsFormOpen(true);
     const closeForm = () => setIsFormOpen(false);
+
+    const handleTestVerify = () => {
+        window.location.href = "/verify?token=85a51efbc3cf4630bc71ae8181401cf1f08fc19b8255eb154fccddbefd76bc70&redirect=profile";
+    };
 
     return (
         <>
@@ -28,6 +32,13 @@ function Home() {
                         </p>
                         <div className={styles.ctaButtonWrapper}>
                             <SubscribeButton onClick={openForm} />
+                            {/* 테스트용 인증 버튼 추가 */}
+                            <button 
+                                onClick={handleTestVerify}
+                                className={styles.testVerifyButton}
+                            >
+                                테스트 인증
+                            </button>
                             {isFormOpen && <SubscribeForm onCancel={closeForm} />}
                         </div>
                     </div>

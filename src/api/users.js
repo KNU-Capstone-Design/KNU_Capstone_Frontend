@@ -1,7 +1,10 @@
 import axiosInstance from './axios';
 
 export const usersAPI = {
-  users: (categories) => 
-    axiosInstance.patch('/api/users', { categories }),
+  updateCategories: (categories) => 
+    axiosInstance.patch('/users', { categories }),
+  
+  getProfile: () =>
+    axiosInstance.get('/users')
 };
 
