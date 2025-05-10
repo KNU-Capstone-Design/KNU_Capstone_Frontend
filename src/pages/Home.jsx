@@ -11,10 +11,10 @@ function Home() {
     const openForm = () => setIsFormOpen(true);
     const closeForm = () => setIsFormOpen(false);
 
-    const handleTestVerify = () => {
-        //window.location.href = "/verify?token=ef32f82e717b9f40713950e69c01c837474f74c16ff8855f842d1179a23b9aa6&redirect=profile";
-        window.location.href = "verify?token=ef32f82e717b9f40713950e69c01c837474f74c16ff8855f842d1179a23b9aa6&question=67f76e27cf776341c0c813cc&redirect=quiz";
-    };
+    // const handleTestVerify = () => {
+    //     //window.location.href = "/verify?token=ef32f82e717b9f40713950e69c01c837474f74c16ff8855f842d1179a23b9aa6&redirect=profile";
+    //     window.location.href = "verify?token=ef32f82e717b9f40713950e69c01c837474f74c16ff8855f842d1179a23b9aa6&question=67f76e27cf776341c0c813cc&redirect=quiz";
+    // };
 
     return (
         <>
@@ -34,12 +34,12 @@ function Home() {
                         <div className={styles.ctaButtonWrapper}>
                             <SubscribeButton onClick={openForm} />
                             {/* 테스트용 인증 버튼 추가 */}
-                            <button 
+                            {/* <button 
                                 onClick={handleTestVerify}
                                 className={styles.testVerifyButton}
                             >
                                 테스트 인증
-                            </button>
+                            </button> */}
                             {isFormOpen && <SubscribeForm onCancel={closeForm} />}
                         </div>
                     </div>
