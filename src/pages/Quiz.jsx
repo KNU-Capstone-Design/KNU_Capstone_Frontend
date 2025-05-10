@@ -22,6 +22,7 @@ function Quiz() {
   const answerRef = useRef(null);
 
   useEffect(() => {
+  
     const loadQuestion = async () => {
       try {
         const res = await questionAPI.question(questionId);
@@ -37,6 +38,7 @@ function Quiz() {
     try {
       const res = await answerAPI.submitAnswer(questionId, answer);
       setUserAnswer(answer);
+      console.log("temp",res.data);
       setFeedbackData(res.data);
       setSubmitted(true);
     } catch (err) {

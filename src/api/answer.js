@@ -1,10 +1,9 @@
-import axios from 'axios';
+import axiosInstance from './axios';  
 
 export const answerAPI = {
   submitAnswer: (questionId, answer) =>
-    axios.post(`/answers/${questionId}`, { answer }),
+    axiosInstance.post(`/answers/${questionId}`, { answer }), 
 
   getAnswer: (questionId) =>
-    axios.get(`/answers/reveal/${questionId}`)
-  
+    axiosInstance.get(`/answers/reveal/${questionId}`)
 };

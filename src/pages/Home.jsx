@@ -12,7 +12,8 @@ function Home() {
     const closeForm = () => setIsFormOpen(false);
 
     const handleTestVerify = () => {
-        window.location.href = "/verify?token=85a51efbc3cf4630bc71ae8181401cf1f08fc19b8255eb154fccddbefd76bc70&redirect=profile";
+        //window.location.href = "/verify?token=ef32f82e717b9f40713950e69c01c837474f74c16ff8855f842d1179a23b9aa6&redirect=profile";
+        window.location.href = "verify?token=ef32f82e717b9f40713950e69c01c837474f74c16ff8855f842d1179a23b9aa6&question=67f76e27cf776341c0c813cc&redirect=quiz";
     };
 
     return (

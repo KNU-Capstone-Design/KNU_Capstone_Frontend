@@ -10,6 +10,7 @@ const Verify = () => {
     const verifyToken = async () => {
       const token = searchParams.get('token');
       const redirect = searchParams.get('redirect') || '';
+      const questionId = searchParams.get('question');
       
       console.log('Token:', token);
       console.log('Redirect path:', redirect);
@@ -25,6 +26,11 @@ const Verify = () => {
         const response = await axiosInstance.post('/auth/verify', { token });
         console.log('Verification response:', response);
         console.log('Redirecting to:', `/${redirect}`);
+        if(questionId) {
+          console.log('Question ID:', questionId);
+          navigate(`/quiz/${questionId}`, { replace: true });
+          return;
+        }
         navigate(`/${redirect}`, { replace: true });
       } catch (error) {
         console.error('인증 실패:', error);
