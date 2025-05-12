@@ -39,7 +39,7 @@
   border-radius: 50%;
   width: 36px;
   height: 36px;
-  font-size: 16px;
+  font-size: 20px;
   cursor: pointer;
   display: flex;
   align-items: center;
@@ -49,4 +49,11 @@
 .error {
   color: red;
   font-size: 13px;
+}
+@media (max-width: 600px) {
+  .sendButton {
+    font-size: 24px;   /* ⬅️ 화살표 크게 */
+    width: 48px;
+    height: 48px;
+  }
 }
