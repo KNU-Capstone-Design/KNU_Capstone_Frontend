@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
-import styles from './SubscribeForm.module.css';
-import { subscribeAPI } from '../api/subscribe.js';
-import { usersAPI } from '../api/users.js';
+import styles from '../SubscribeForm.module.css';
+import { subscribeAPI } from '../../api/subscribe.js';
+import { usersAPI } from '../../api/users.js';
 
 const fields = ['Android', 'iOS', 'Frontend', 'Backend'];
 
