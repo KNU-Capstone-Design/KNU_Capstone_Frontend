@@ -5,7 +5,7 @@ function Answer({ answerData }) {
   if (!answerData) return null;
 
   return (
-    <div className={styles.revealWrapper}>
+    <div className={styles.answerBox}>
       <h2>💡 정답</h2>
       <p>{answerData.answer}</p>
 
