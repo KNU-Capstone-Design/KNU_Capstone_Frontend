@@ -50,7 +50,14 @@ function Quiz() {
     try {
       setShowAnswer(true);
       const res = await answerAPI.getAnswer(questionId);
-      setAnswerData(res.data);
+      // API가 전체 결과를 answer 필드에 JSON 문자열로 보낼 경우 파싱
+      const apiData = res.data;
+      const parsedData =
+        typeof apiData.answer === 'string' &&
+        apiData.answer.trim().startsWith('{')
+          ? JSON.parse(apiData.answer)
+          : apiData;
+      setAnswerData(parsedData);
 
       setTimeout(() => {
         answerRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -111,7 +118,27 @@ function Quiz() {
         {/* 정답 */}
         {showAnswer && answerData && (
           <div className={styles.questionRow} ref={answerRef}>
-            <Answer answer={answerData.answer} />
+            <div className={styles.revealWrapper}>
+              <h2>💡 정답</h2>
+              <p>{answerData.answer}</p>
+
+              <h3>📝 설명</h3>
+              <p>{answerData.explanation}</p>
+
+              <h3>📚 예시</h3>
+              <ul>
+                {answerData.examples?.map((ex, idx) => (
+                  <li key={idx}>{ex}</li>
+                ))}
+              </ul>
+
+              <h3>🔖 추가 노트</h3>
+              <ul>
+                {answerData.notes?.map((note, idx) => (
+                  <li key={idx}>{note}</li>
+                ))}
+              </ul>
+            </div>
             <div className={styles.solutionSpacer} />
           </div>
         )}
