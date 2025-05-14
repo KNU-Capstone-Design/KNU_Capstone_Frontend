@@ -118,29 +118,9 @@ function Quiz() {
         {/* 정답 */}
         {showAnswer && answerData && (
           <div className={styles.questionRow} ref={answerRef}>
-            <div className={styles.revealWrapper}>
-              <h2>💡 정답</h2>
-              <p>{answerData.answer}</p>
-
-              <h3>📝 설명</h3>
-              <p>{answerData.explanation}</p>
-
-              <h3>📚 예시</h3>
-              <ul>
-                {answerData.examples?.map((ex, idx) => (
-                  <li key={idx}>{ex}</li>
-                ))}
-              </ul>
-
-              <h3>🔖 추가 노트</h3>
-              <ul>
-                {answerData.notes?.map((note, idx) => (
-                  <li key={idx}>{note}</li>
-                ))}
-              </ul>
-            </div>
-            <div className={styles.solutionSpacer} />
-          </div>
+            <Answer answerData={answerData} />
+           <div className={styles.solutionSpacer} />
+           </div>
         )}
       </div>
 
