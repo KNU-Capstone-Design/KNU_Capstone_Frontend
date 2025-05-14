@@ -1,6 +1,9 @@
 // src/pages/QuizList.jsx
 
 import React, { useState } from 'react';
+import styles from './QuizList.module.css';
+import ProfileButton from './ProfileButton';
+import ProfileForm from './ProfileForm';
 
 const totalPages = 30;
 const itemsPerPage = 10;
@@ -9,6 +12,7 @@ const pagesPerGroup = 3;
 export default function QuizList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [groupStart, setGroupStart] = useState(1);
+  const [showProfileForm, setShowProfileForm] = useState(false);
 
   const questions = Array.from({ length: itemsPerPage }, (_, i) => ({
     score: `${Math.floor(Math.random() * 100)}점`,
@@ -28,6 +32,14 @@ export default function QuizList() {
     } else {
       setCurrentPage(page);
     }
+  };
+
+  const handleProfileClick = () => {
+    setShowProfileForm(true);
+  };
+
+  const handleCloseForm = () => {
+    setShowProfileForm(false);
   };
 
   const renderPagination = () => {
@@ -51,20 +63,13 @@ export default function QuizList() {
     }
 
     return (
-      <div style={{ display: 'flex', justifyContent: 'center', marginTop: 20 }}>
+      <div className={styles.paginationContainer}>
         {list.map((pg, idx) =>
           pg === 'prev' ? (
             <button
               key={idx}
               onClick={() => handlePageClick('prev')}
-              style={{
-                margin: '0 4px',
-                padding: '6px 12px',
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-                fontSize: 18,
-              }}
+              className={styles.navButton}
             >
               …
             </button>
@@ -72,14 +77,7 @@ export default function QuizList() {
             <button
               key={idx}
               onClick={() => handlePageClick('next')}
-              style={{
-                margin: '0 4px',
-                padding: '6px 12px',
-                border: 'none',
-                background: 'transparent',
-                cursor: 'pointer',
-                fontSize: 18,
-              }}
+              className={styles.navButton}
             >
               …
             </button>
@@ -87,14 +85,7 @@ export default function QuizList() {
             <button
               key={idx}
               onClick={() => handlePageClick(pg)}
-              style={{
-                margin: '0 4px',
-                padding: '6px 12px',
-                border: currentPage === pg ? '2px solid #007bff' : '1px solid #ccc',
-                borderRadius: 4,
-                background: currentPage === pg ? '#e3f2ff' : '#fff',
-                cursor: 'pointer',
-              }}
+              className={`${styles.pageButton} ${currentPage === pg ? styles.activePageButton : ''}`}
             >
               {pg}
             </button>
@@ -105,25 +96,25 @@ export default function QuizList() {
   };
 
   return (
-    <div style={{ padding: 20, maxWidth: 800, margin: 'auto' }}>
-      <h2>문제 목록 (페이지 {currentPage})</h2>
+    <div className={styles.container}>
+      <div className={styles.header}>
+        <h2 className={styles.title}>문제 목록 (페이지 {currentPage})</h2>
+        <ProfileButton onClick={handleProfileClick} />
+      </div>
+      
       {questions.map((q, idx) => (
         <div
           key={idx}
-          style={{
-            display: 'flex',
-            alignItems: 'center',
-            border: '1px solid #ccc',
-            borderRadius: 6,
-            padding: 12,
-            marginBottom: 12,
-          }}
+          className={styles.questionItem}
         >
-          <span style={{ fontWeight: 'bold', marginRight: 16 }}>{q.score}</span>
+          <span className={styles.score}>{q.score}</span>
           <span>{q.text}</span>
         </div>
       ))}
       {renderPagination()}
+      
+      {/* 조건부 렌더링으로 ProfileForm 팝업 표시 */}
+      {showProfileForm && <ProfileForm onCancel={handleCloseForm} />}
     </div>
   );
 }

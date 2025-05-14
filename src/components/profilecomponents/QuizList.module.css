@@ -1,0 +1,59 @@
+.container {
+  padding: 20px;
+  max-width: 800px;
+  margin: auto;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.title {
+  margin: 0;
+}
+
+.questionItem {
+  display: flex;
+  align-items: center;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 12px;
+  margin-bottom: 12px;
+}
+
+.score {
+  font-weight: bold;
+  margin-right: 16px;
+}
+
+.paginationContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.pageButton {
+  margin: 0 4px;
+  padding: 6px 12px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.navButton {
+  margin: 0 4px;
+  padding: 6px 12px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  font-size: 18px;
+}
+
+.activePageButton {
+  border: 2px solid #007bff;
+  background: #e3f2ff;
+}

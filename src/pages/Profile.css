@@ -1,0 +1,41 @@
+.profile-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 24px;
+    border-bottom: 1px solid #ccc;
+}
+
+.logo img {
+    height: 60px;    /* 확대: 40px → 60px */
+    width: auto;
+}
+
+.status-text {
+    font-size: 16px;
+    color: #333;
+}
+
+.status-text .email {
+    color: #007AFF;
+    margin-right: 4px;
+}
+
+.status-text .days {
+    color: #333;
+}
+
+.settings img {
+    height: 32px;    /* 확대: 24px → 32px */
+    width: auto;
+    cursor: pointer;
+}
+
+.profile-content {
+    padding: 24px;
+}
+
+.content-container {
+    margin-top: 70px; /* Navbar 높이에 따라 조정하세요 */
+    padding: 0 16px;
+}
