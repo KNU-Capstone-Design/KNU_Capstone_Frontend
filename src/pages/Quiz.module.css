@@ -1,0 +1,76 @@
+.quizContainer {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 60px 20px 120px;
+  position: relative;
+}
+
+.questionRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 16px;
+  margin-bottom: 1.5rem;
+}
+
+.solutionButton {
+  margin-top: 50px; /* ✅ 여기 추가! */
+  height: 40px;
+  padding: 0 16px;
+  background-color: #5c9eff;
+  color: white;
+  font-size: 20px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.userAnswerBox {
+  border: 1px solid #a3c4f3;
+  padding: 16px;
+  border-radius: 12px;
+  background-color: #fff;
+  margin-top: 1.5rem;
+  font-size: 16px;
+}
+
+.stickyInput {
+  position: fixed;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: calc(100% - 40px);
+  max-width: 800px;
+  background-color: transparent;
+  padding: 0;
+}
+@media (max-width: 600px) {
+  .quizContainer {
+    padding: 100px 16px 100px; 
+  }
+
+  .questionRow {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .solutionButton {
+    align-self: flex-end;
+    margin-top: 1rem;
+    font-size: 16px;
+    height: 36px;
+    padding: 0 12px;
+  }
+
+  .userAnswerBox,
+  .commonBox {
+    font-size: 15px;
+    padding: 12px;
+  }
+
+  .stickyInput {
+    bottom: 24px;
+    width: calc(100% - 24px);
+  }
+}
