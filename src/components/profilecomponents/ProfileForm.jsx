@@ -100,7 +100,6 @@ function ProfileForm({ onCancel }) {
         }
         
         try {
-            console.log(categories)
             await usersAPI.updateCategories(categories);
             alert('정보 변경을 성공했어요!');
             onCancel();
