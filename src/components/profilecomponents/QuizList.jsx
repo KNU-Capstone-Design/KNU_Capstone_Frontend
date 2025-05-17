@@ -14,12 +14,15 @@ export default function QuizList() {
   const [groupStart, setGroupStart] = useState(1);
   const [showProfileForm, setShowProfileForm] = useState(false);
 
+  // 샘플 문제 데이터 생성 (이미지처럼 날짜와 설명 포함)
   const questions = Array.from({ length: itemsPerPage }, (_, i) => ({
-    score: `${Math.floor(Math.random() * 100)}점`,
-    text: `샘플 문제 #${(currentPage - 1) * itemsPerPage + i + 1}`,
+    date: "05.02",
+    score: Math.floor(Math.random() * 50) + 50, // 50~100점 사이 무작위 점수
+    text: "Layout XML 파일의 기본 구조와 주요 속성을 간단히 설명해 주세요."
   }));
 
   const handlePageClick = (page) => {
+    // 기존 페이지 전환 로직 유지
     if (page === 'prev') {
       const prevStart = Math.max(groupStart - pagesPerGroup, 1);
       setGroupStart(prevStart);
@@ -42,21 +45,25 @@ export default function QuizList() {
     setShowProfileForm(false);
   };
 
+  const handleMoreClick = (question) => {
+    // 더보기 버튼 클릭 시 동작 추가
+    console.log('More button clicked for question:', question);
+  };
+
+  // 페이지네이션 렌더링 로직 유지
   const renderPagination = () => {
+    // 기존 코드 유지
     const list = [];
 
-    // 앞 그룹이 있다면
     if (groupStart > 1) {
       list.push(1);
       list.push('prev');
     }
 
-    // 현재 그룹 페이지들
     for (let p = groupStart; p < groupStart + pagesPerGroup && p <= totalPages; p++) {
       list.push(p);
     }
 
-    // 뒷 그룹이 있다면
     if (groupStart + pagesPerGroup <= totalPages) {
       list.push('next');
       list.push(totalPages);
@@ -95,25 +102,60 @@ export default function QuizList() {
     );
   };
 
+  // 서버에서 받은 스트릭 날짜
+  const streakDays = 7; // 예시 값
+
   return (
     <div className={styles.container}>
       <div className={styles.header}>
-        <h2 className={styles.title}>문제 목록 (페이지 {currentPage})</h2>
-        <ProfileButton onClick={handleProfileClick} />
+        <div className={styles.userInfo}>
+          <span className={styles.email}>example@google.com</span>
+          <span className={styles.welcomeText}>님 <span className={styles.highlight}>{streakDays}</span>일째 면도 중입니다.</span>
+        </div>
+      
+        <div className={styles.profileButtonWrapper}>
+          <ProfileButton onClick={handleProfileClick} />
+        </div>
       </div>
       
-      {questions.map((q, idx) => (
-        <div
-          key={idx}
-          className={styles.questionItem}
-        >
-          <span className={styles.score}>{q.score}</span>
-          <span>{q.text}</span>
-        </div>
-      ))}
+      <div className={styles.divider}></div>
+      
+      <div className={styles.questionList}>
+        {questions.map((q, idx) => (
+          <div
+            key={idx}
+            className={styles.questionItem}
+          >
+            <div className={styles.questionContent}>
+              <div className={styles.questionDate}>{q.date}</div>
+              <div className={styles.questionText}>{q.text}</div>
+            </div>
+            <div className={styles.scoreSection}>
+              <span 
+                className={`${styles.scoreValue} ${
+                  q.score >= 80 ? styles.scoreHigh : 
+                  q.score >= 40 ? styles.scoreMedium : 
+                  styles.scoreLow
+                }`}
+              >
+                {q.score}점
+              </span>
+              <button 
+                className={styles.moreButton}
+                onClick={() => handleMoreClick(q)}
+                aria-label="더 보기"
+              >
+                <span className={styles.dot}></span>
+                <span className={styles.dot}></span>
+                <span className={styles.dot}></span>
+              </button>
+            </div>
+          </div>
+        ))}
+      </div>
+      
       {renderPagination()}
       
-      {/* 조건부 렌더링으로 ProfileForm 팝업 표시 */}
       {showProfileForm && <ProfileForm onCancel={handleCloseForm} />}
     </div>
   );
