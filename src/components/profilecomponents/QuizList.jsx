@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 import styles from './QuizList.module.css';
 import ProfileButton from './ProfileButton';
 import ProfileForm from './ProfileForm';
+import QuizPopup from './QuizPopup'; // 새로 만든 컴포넌트 import
 
 const totalPages = 30;
 const itemsPerPage = 10;
@@ -13,6 +14,8 @@ export default function QuizList() {
   const [currentPage, setCurrentPage] = useState(1);
   const [groupStart, setGroupStart] = useState(1);
   const [showProfileForm, setShowProfileForm] = useState(false);
+  const [showPopup, setShowPopup] = useState(false);
+  const [selectedQuestion, setSelectedQuestion] = useState(null);
 
   // 샘플 문제 데이터 생성 (이미지처럼 날짜와 설명 포함)
   const questions = Array.from({ length: itemsPerPage }, (_, i) => ({
@@ -46,8 +49,14 @@ export default function QuizList() {
   };
 
   const handleMoreClick = (question) => {
-    // 더보기 버튼 클릭 시 동작 추가
-    console.log('More button clicked for question:', question);
+    // 더보기 버튼 클릭 시 선택한 질문 저장하고 팝업 열기
+    setSelectedQuestion(question);
+    setShowPopup(true);
+  };
+
+  const handleClosePopup = () => {
+    setShowPopup(false);
+    setSelectedQuestion(null);
   };
 
   // 페이지네이션 렌더링 로직 유지
@@ -157,6 +166,9 @@ export default function QuizList() {
       {renderPagination()}
       
       {showProfileForm && <ProfileForm onCancel={handleCloseForm} />}
+
+      {/* 팝업 컴포넌트를 별도의 컴포넌트로 분리하고 props 전달 */}
+      {showPopup && <QuizPopup question={selectedQuestion} onClose={handleClosePopup} />}
     </div>
   );
 }
