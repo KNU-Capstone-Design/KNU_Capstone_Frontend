@@ -79,9 +79,14 @@ const QuizPopup = ({ question, onClose }) => {
                 </span>
               </div>
               
-              {/* 문제 섹션 */}
+              {/* 문제 섹션 - 카테고리를 자연스럽게 표시 */}
               <div className={styles.section}>
-                <h3 className={styles.sectionTitle}>❓ 문제</h3>
+                <div className={styles.titleRow}>
+                  <h3 className={styles.sectionTitle}>❓ 문제</h3>
+                  <span className={styles.smallCategory}>
+                    {question.category || "Android"}
+                  </span>
+                </div>
                 <p className={styles.popupQuestion}>{question.text}</p>
               </div>
               
