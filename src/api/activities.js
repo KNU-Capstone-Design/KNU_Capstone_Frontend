@@ -7,6 +7,5 @@ export const activitiesAPI = {
   
   // 특정 활동 상세 조회 
   getActivityDetail: (activityId) =>
-    axiosInstance.get(`/activities/${questionId}`),
-  
+    axiosInstance.get(`/activities/${activityId}`),
 };

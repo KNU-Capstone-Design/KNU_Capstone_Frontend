@@ -121,16 +121,15 @@ export default function QuizList() {
 
   const handleMoreClick = async (question) => {
     try {
-      // 팝업에서 보여줄 상세 정보를 API에서 가져오기
+      // 팝업에서 보여줄 상세 정보를 API에서 가져오기 (단일 API 호출)
       const detailResponse = await activitiesAPI.getActivityDetail(question.id);
-      const feedbackResponse = await activitiesAPI.getActivityFeedback(question.id);
       
-      // 선택한 질문에 추가 데이터 병합
+      // detailResponse에는 이미 feedback과 answer 데이터가 모두 포함되어 있음
       const enrichedQuestion = {
         ...question,
-        userAnswer: detailResponse.data.userAnswer,
-        feedbackData: feedbackResponse.data,
-        answerData: detailResponse.data.answerData
+        userAnswer: detailResponse.data.feedback?.userAnswer || "",
+        feedbackData: detailResponse.data.feedback || {},
+        answerData: detailResponse.data.answer || {}
       };
       
       setSelectedQuestion(enrichedQuestion);
