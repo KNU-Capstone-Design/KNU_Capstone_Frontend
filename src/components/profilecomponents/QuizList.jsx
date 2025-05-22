@@ -47,6 +47,7 @@ export default function QuizList() {
       
       // 데이터 형식 변환 (API 응답 -> 컴포넌트에서 사용하는 형식)
       const formattedQuestions = response.data.data.map(item => ({
+        qid: item.questionId,
         id: item._id,
         date: item.date,
         text: item.title,

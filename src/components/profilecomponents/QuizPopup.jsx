@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import styles from './QuizPopup.module.css';
 import { activitiesAPI } from '../../api/activities';
+import { answerAPI } from '../../api/answer';
 
 const QuizPopup = ({ question, onClose }) => {
   const [showAnswer, setShowAnswer] = useState(false);
   const [detailData, setDetailData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [answerData, setAnswerData] = useState(null);
+  const [loadingAnswer, setLoadingAnswer] = useState(false);
   
   // 팝업이 열릴 때 스크롤 방지
   useEffect(() => {
@@ -35,6 +38,38 @@ const QuizPopup = ({ question, onClose }) => {
 
     fetchDetailData();
   }, [question]);
+
+  // 정답 버튼 클릭 시 정답 데이터 가져오기
+  useEffect(() => {
+    if (!showAnswer || !question || !question.id) return;
+
+    // 이미 상세 데이터에 정답이 있으면 추가 API 호출 필요 없음
+    if (detailData && detailData.answer && detailData.answer.answer) return;
+
+    const fetchAnswerData = async () => {
+      setLoadingAnswer(true);
+      try {
+        console.log("정답 데이터 요청:", question.qid);
+        const response = await answerAPI.getAnswer(question.qid);
+        
+        // API 응답 구조 변환 (example 문자열을 examples 배열로 변환)
+        const formattedAnswer = {
+          answer: response.data.answer || "",
+          explanation: response.data.explanation || "",
+          examples: response.data.example ? [response.data.example] : [],
+          notes: response.data.notes ? response.data.notes.split(". ").filter(note => note.trim()) : []
+        };
+        
+        setAnswerData(formattedAnswer);
+        setLoadingAnswer(false);
+      } catch (err) {
+        console.error("정답 정보를 불러오는 중 오류가 발생했습니다:", err);
+        setLoadingAnswer(false);
+      }
+    };
+
+    fetchAnswerData();
+  }, [showAnswer, question, detailData]);
 
   // API 응답을 컴포넌트에서 사용하는 형식으로 매핑
   const mapFeedbackData = () => {
@@ -66,15 +101,16 @@ const QuizPopup = ({ question, onClose }) => {
     wrongPoints: []
   };
   
-  // 정답 데이터 가져오기 - 샘플 데이터 제거
-  const answerData = detailData && detailData.answer ? detailData.answer : {
-    answer: "",
-    explanation: "",
-    examples: [],
-    notes: []
-  };
+  // 정답 데이터 가져오는 로직 - 우선순위: API 응답 > 상세 데이터 > 빈 데이터
+  const finalAnswerData = answerData || 
+    (detailData && detailData.answer ? detailData.answer : {
+      answer: "",
+      explanation: "",
+      examples: [],
+      notes: []
+    });
 
-  // 사용자 답변 가져오기 - 샘플 데이터 제거
+  // 사용자 답변 가져오기
   const userAnswer = detailData && detailData.feedback ? 
     detailData.feedback.userAnswer : 
     question.userAnswer || "";
@@ -193,38 +229,47 @@ const QuizPopup = ({ question, onClose }) => {
                   {showAnswer ? '정답 숨기기' : '정답 보기'}
                 </button>
                 
-                {/* 정답 섹션 - Answer.jsx와 동일한 구조로 변경 */}
+                {/* 정답 섹션 */}
                 {showAnswer && (
                   <div className={styles.answerBox}>
-                    <h2>💡 정답</h2>
-                    <p>{answerData.answer}</p>
-
-                    {answerData.explanation && (
+                    {loadingAnswer ? (
+                      <div className={styles.loadingContainer}>
+                        <div className={styles.spinner}></div>
+                        <p>정답을 불러오는 중...</p>
+                      </div>
+                    ) : (
                       <>
-                        <h3>📝 설명</h3>
-                        <p>{answerData.explanation}</p>
-                      </>
-                    )}
+                        <h2>💡 정답</h2>
+                        <p>{finalAnswerData.answer}</p>
 
-                    {answerData.examples && answerData.examples.length > 0 && (
-                      <>
-                        <h3>📚 예시</h3>
-                        <ul>
-                          {answerData.examples.map((ex, idx) => (
-                            <li key={idx}>{ex}</li>
-                          ))}
-                        </ul>
-                      </>
-                    )}
+                        {finalAnswerData.explanation && (
+                          <>
+                            <h3>📝 설명</h3>
+                            <p>{finalAnswerData.explanation}</p>
+                          </>
+                        )}
 
-                    {answerData.notes && answerData.notes.length > 0 && (
-                      <>
-                        <h3>🔖 추가 노트</h3>
-                        <ul>
-                          {answerData.notes.map((note, idx) => (
-                            <li key={idx}>{note}</li>
-                          ))}
-                        </ul>
+                        {finalAnswerData.examples && finalAnswerData.examples.length > 0 && (
+                          <>
+                            <h3>📚 예시</h3>
+                            <ul>
+                              {finalAnswerData.examples.map((ex, idx) => (
+                                <li key={idx}>{ex}</li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
+
+                        {finalAnswerData.notes && finalAnswerData.notes.length > 0 && (
+                          <>
+                            <h3>🔖 추가 노트</h3>
+                            <ul>
+                              {finalAnswerData.notes.map((note, idx) => (
+                                <li key={idx}>{note}</li>
+                              ))}
+                            </ul>
+                          </>
+                        )}
                       </>
                     )}
                   </div>
