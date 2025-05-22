@@ -1,6 +1,6 @@
 // src/pages/QuizList.jsx
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './QuizList.module.css';
 import ProfileButton from './ProfileButton';
 import ProfileForm from './ProfileForm';
@@ -25,6 +25,9 @@ export default function QuizList() {
   const [userEmail, setUserEmail] = useState(''); // 이메일을 저장할 상태 추가
   const [limit] = useState(10); // 한 페이지에 표시할 항목 수
 
+  // 문제: 같은 질문을 여러 번 열 때마다 새로운 API 요청
+  const [cachedDetails, setCachedDetails] = useState({});
+
   // 컴포넌트 마운트 시 localStorage에서 이메일 정보 불러오기
   useEffect(() => {
     const storedMetaData = JSON.parse(localStorage.getItem('quizMetaData'));
@@ -36,65 +39,67 @@ export default function QuizList() {
   }, []);
 
   // API에서 데이터 가져오기
-  useEffect(() => {
-    const fetchQuestions = async () => {
-      setLoading(true);
-      try {
-        // API 모듈을 통해 데이터 요청
-        const response = await activitiesAPI.getActivities(currentPage, limit);
+  const fetchQuestions = useCallback(async () => {
+    setLoading(true);
+    try {
+      // API 모듈을 통해 데이터 요청
+      const response = await activitiesAPI.getActivities(currentPage, limit);
+      
+      // 데이터 형식 변환 (API 응답 -> 컴포넌트에서 사용하는 형식)
+      const formattedQuestions = response.data.data.map(item => ({
+        id: item._id,
+        date: item.date,
+        text: item.title,
+        category: item.category,
+        score: item.score
+      }));
+      
+      setQuestions(formattedQuestions);
+      
+      // page=1 일 때만 메타데이터가 포함됨
+      if (currentPage === 1) {
+        const metaData = {
+          email: response.data.email,
+          page: response.data.page,
+          limit: response.data.limit,
+          total: response.data.total,
+          totalPages: response.data.totalPages,
+          streak: response.data.streak
+        };
         
-        // 데이터 형식 변환 (API 응답 -> 컴포넌트에서 사용하는 형식)
-        const formattedQuestions = response.data.data.map(item => ({
-          id: item._id,
-          date: item.date,
-          text: item.title,
-          category: item.category,
-          score: item.score
-        }));
-        
-        setQuestions(formattedQuestions);
-        
-        // page=1 일 때만 메타데이터가 포함됨
-        if (currentPage === 1) {
-          const metaData = {
-            email: response.data.email,
-            page: response.data.page,
-            limit: response.data.limit,
-            total: response.data.total,
-            totalPages: response.data.totalPages,
-            streak: response.data.streak
-          };
-          
-          // 메타데이터 localStorage에 저장
+        // 기존 데이터와 비교 후 변경됐을 때만 저장
+        const existingData = JSON.parse(localStorage.getItem('quizMetaData') || '{}');
+        if (JSON.stringify(existingData) !== JSON.stringify(metaData)) {
           localStorage.setItem('quizMetaData', JSON.stringify(metaData));
-          
-          // 상태 업데이트
-          setTotalPages(response.data.totalPages);
-          setStreakDays(response.data.streak);
-          setUserEmail(response.data.email); // 이메일 정보 상태 업데이트
-        } else {
-          // page != 1일 때는 localStorage에서 메타데이터 불러오기
-          const storedMetaData = JSON.parse(localStorage.getItem('quizMetaData'));
-          if (storedMetaData) {
-            setTotalPages(storedMetaData.totalPages);
-            setStreakDays(storedMetaData.streak);
-            // 이메일 정보가 없을 경우에만 업데이트 (이미 설정되어 있을 수 있음)
-            if (!userEmail && storedMetaData.email) {
-              setUserEmail(storedMetaData.email);
-            }
-          }
         }
         
-        setLoading(false);
-      } catch (err) {
-        console.error("데이터를 불러오는 중 오류가 발생했습니다:", err);
-        setError("데이터를 불러오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
-        setLoading(false);
+        // 상태 업데이트
+        setTotalPages(response.data.totalPages);
+        setStreakDays(response.data.streak);
+        setUserEmail(response.data.email); // 이메일 정보 상태 업데이트
+      } else {
+        // page != 1일 때는 localStorage에서 메타데이터 불러오기
+        const storedMetaData = JSON.parse(localStorage.getItem('quizMetaData'));
+        if (storedMetaData) {
+          setTotalPages(storedMetaData.totalPages);
+          setStreakDays(storedMetaData.streak);
+          // 이메일 정보가 없을 경우에만 업데이트 (이미 설정되어 있을 수 있음)
+          if (!userEmail && storedMetaData.email) {
+            setUserEmail(storedMetaData.email);
+          }
+        }
       }
-    };
+    } catch (err) {
+      console.error("데이터를 불러오는 중 오류가 발생했습니다:", err);
+      setError("데이터를 불러오는 중 문제가 발생했습니다. 잠시 후 다시 시도해주세요.");
+    } finally {
+      setLoading(false);
+    }
+  }, [currentPage, limit]);
 
+  useEffect(() => {
     fetchQuestions();
-  }, [currentPage, limit, userEmail]);
+  }, [fetchQuestions]);
 
   const handlePageClick = (page) => {
     if (page === 'prev') {
@@ -119,36 +124,84 @@ export default function QuizList() {
     setShowProfileForm(false);
   };
 
-  const handleMoreClick = async (question) => {
+  const handleMoreClick = useCallback(async (question) => {
+    // 캐시 확인
+    if (cachedDetails[question.id]) {
+      setSelectedQuestion({
+        ...question,
+        ...cachedDetails[question.id]
+      });
+      setShowPopup(true);
+      return;
+    }
+    
     try {
-      // 팝업에서 보여줄 상세 정보를 API에서 가져오기 (단일 API 호출)
       const detailResponse = await activitiesAPI.getActivityDetail(question.id);
       
-      // detailResponse에는 이미 feedback과 answer 데이터가 모두 포함되어 있음
-      const enrichedQuestion = {
-        ...question,
+      const questionDetails = {
         userAnswer: detailResponse.data.feedback?.userAnswer || "",
         feedbackData: detailResponse.data.feedback || {},
         answerData: detailResponse.data.answer || {}
       };
       
-      setSelectedQuestion(enrichedQuestion);
-      setShowPopup(true);
+      // 캐시에 저장
+      setCachedDetails(prev => ({
+        ...prev,
+        [question.id]: questionDetails
+      }));
       
+      setSelectedQuestion({
+        ...question,
+        ...questionDetails
+      });
+      setShowPopup(true);
     } catch (err) {
       console.error("상세 정보를 불러오는 중 오류가 발생했습니다:", err);
-      // 기본 정보만으로 팝업 열기
       setSelectedQuestion(question);
       setShowPopup(true);
     }
-  };
+  }, [cachedDetails]);
 
   const handleClosePopup = () => {
     setShowPopup(false);
     setSelectedQuestion(null);
   };
 
-  const renderPagination = () => {
+  const questionsList = useMemo(() => {
+    return questions.map((q, idx) => (
+      <div
+        key={q.id || idx} // id가 더 안정적이므로 우선 사용
+        className={styles.questionItem}
+      >
+        <div className={styles.questionContent}>
+          <div className={styles.questionDate}>{q.date}</div>
+          <div className={styles.questionText}>{q.text}</div>
+        </div>
+        <div className={styles.scoreSection}>
+          <span 
+            className={`${styles.scoreValue} ${
+              q.score >= 80 ? styles.scoreHigh : 
+              q.score >= 40 ? styles.scoreMedium : 
+              styles.scoreLow
+            }`}
+          >
+            {q.score}점
+          </span>
+          <button 
+            className={styles.moreButton}
+            onClick={() => handleMoreClick(q)}
+            aria-label="더 보기"
+          >
+            <span className={styles.dot}></span>
+            <span className={styles.dot}></span>
+            <span className={styles.dot}></span>
+          </button>
+        </div>
+      </div>
+    ));
+  }, [questions, handleMoreClick]);
+
+  const pagination = useMemo(() => {
     const list = [];
 
     if (groupStart > 1) {
@@ -196,7 +249,7 @@ export default function QuizList() {
         )}
       </div>
     );
-  };
+  }, [groupStart, totalPages, PAGES_PER_GROUP, currentPage]);
 
   return (
     <div className={styles.container}>
@@ -216,45 +269,26 @@ export default function QuizList() {
       
       <div className={styles.questionList}>
         {loading ? (
-          <div>로딩 중...</div>
+          <div className={styles.loadingContainer}>
+            <div className={styles.spinner}></div>
+            <p>데이터를 불러오는 중...</p>
+          </div>
         ) : error ? (
-          <div>{error}</div>
-        ) : (
-          questions.map((q, idx) => (
-            <div
-              key={idx}
-              className={styles.questionItem}
+          <div className={styles.errorContainer}>
+            <p>{error}</p>
+            <button 
+              onClick={() => fetchQuestions()} 
+              className={styles.retryButton}
             >
-              <div className={styles.questionContent}>
-                <div className={styles.questionDate}>{q.date}</div>
-                <div className={styles.questionText}>{q.text}</div>
-              </div>
-              <div className={styles.scoreSection}>
-                <span 
-                  className={`${styles.scoreValue} ${
-                    q.score >= 80 ? styles.scoreHigh : 
-                    q.score >= 40 ? styles.scoreMedium : 
-                    styles.scoreLow
-                  }`}
-                >
-                  {q.score}점
-                </span>
-                <button 
-                  className={styles.moreButton}
-                  onClick={() => handleMoreClick(q)}
-                  aria-label="더 보기"
-                >
-                  <span className={styles.dot}></span>
-                  <span className={styles.dot}></span>
-                  <span className={styles.dot}></span>
-                </button>
-              </div>
-            </div>
-          ))
+              다시 시도
+            </button>
+          </div>
+        ) : (
+          questionsList
         )}
       </div>
       
-      {renderPagination()}
+      {pagination}
       
       {showProfileForm && <ProfileForm onCancel={handleCloseForm} />}
 
