@@ -146,20 +146,29 @@
 
 /* 정답 보기 버튼 스타일 */
 .answerButton {
-  background-color: #4a90e2;
-  color: white;
+  min-width: 140px;
+  padding: 12px 20px;
   border: none;
-  padding: 8px 16px;
-  border-radius: 4px;
-  font-size: 14px;
-  font-weight: 500;
+  border-radius: 8px;
+  font-size: 16px;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s;
-  margin-bottom: 10px;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .answerButton:hover {
   background-color: #357ac1;
+}
+
+/* 버튼 클릭 효과 */
+.answerButton:active {
+  transform: translateY(1px);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
 }
 
 .correctAnswer {
@@ -223,6 +232,15 @@
   line-height: 1.5;
 }
 
+/* 정답이 표시될 때 버튼 스타일 변경 */
+.answerSection:has(.answerBox) .viewAnswerButton {
+  background-color: #f59e0b;
+}
+
+.answerSection:has(.answerBox) .viewAnswerButton:hover {
+  background-color: #d97706;
+}
+
 /* 점수 색상 스타일 */
 .scoreHigh {
   color: #2ecc71; /* 초록색 (80점 이상) */
@@ -261,6 +279,56 @@
   margin-top: 2px; /* 약간의 마진으로 미세 조정 */
 }
 
+/* 버튼 컨테이너 개선 */
+.buttonContainer {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin: 20px 0;
+  flex-wrap: wrap;
+}
+
+/* 정답 보기 버튼 스타일 */
+.viewAnswerButton {
+  background-color: #3b82f6;
+  color: white;
+}
+
+.viewAnswerButton:hover {
+  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 문제 풀기 버튼 스타일 */
+.solveButton {
+  background-color: #10b981;
+  color: white;
+}
+
+.solveButton:hover {
+  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* 다시 풀기 버튼 스타일 */
+.retryButton {
+  background-color: #10b981; 
+  color: white;
+}
+
+.retryButton:hover {
+  background-color: #059669;  /* 문제 풀기와 동일한 hover 색상 */
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(16, 185, 129, 0.25);  /* 초록색에 맞는 그림자 색상 */  
+}
+
+.retryButton:active {
+  transform: translateY(1px);
+  background-color: #047857;  /* 조금 더 진한 초록색 */
+}
+
 /* 페이드인 애니메이션 */
 @keyframes fadeIn {
   from {
@@ -287,5 +355,17 @@
   .section {
     padding: 12px;
     margin-bottom: 16px;
+  }
+}
+
+/* 모바일 화면에서 스타일 조정 */
+@media (max-width: 640px) {
+  .buttonContainer {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .answerButton {
+    width: 100%;
   }
 }

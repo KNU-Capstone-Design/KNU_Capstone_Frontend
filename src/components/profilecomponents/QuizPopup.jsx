@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom'; // React Router 사용 시 추가
 import styles from './QuizPopup.module.css';
 import { activitiesAPI } from '../../api/activities';
 import { answerAPI } from '../../api/answer';
@@ -11,6 +12,21 @@ const QuizPopup = ({ question, onClose }) => {
   const [answerData, setAnswerData] = useState(null);
   const [loadingAnswer, setLoadingAnswer] = useState(false);
   
+  // React Router 사용 시 추가
+  const navigate = useNavigate();
+  
+  // 문제 풀기 페이지로 이동하는 함수
+  const handleSolveQuestion = () => {
+    if (question && question.qid) {
+      // 문제 풀기 페이지로 이동 (questionId 전달)
+      navigate(`/quiz/${question.qid}`);
+    } else {
+      console.error("문제 ID가 없습니다");
+      // 대체 동작: 일반 문제 페이지로 이동
+      navigate('/quiz');
+    }
+  };
+
   // 팝업이 열릴 때 스크롤 방지
   useEffect(() => {
     document.body.style.overflow = 'hidden';
@@ -183,10 +199,9 @@ const QuizPopup = ({ question, onClose }) => {
       notes: []
     });
 
-  // 사용자 답변 가져오기
-  const userAnswer = detailData && detailData.feedback ? 
-    detailData.feedback.userAnswer : 
-    question.userAnswer || "";
+  // 사용자 답변 존재 여부 확인
+  const userAnswer = detailData?.feedback?.userAnswer || "";
+  const hasUserAnswer = Boolean(userAnswer && userAnswer.trim() !== "");
 
   return (
     <div className={styles.popupOverlay} onClick={onClose}>
@@ -293,14 +308,26 @@ const QuizPopup = ({ question, onClose }) => {
                 )}
               </div>
               
-              {/* 정답 보기 버튼 */}
+              {/* 정답 보기 버튼 섹션 수정 */}
               <div className={styles.answerSection}>
-                <button 
-                  onClick={() => setShowAnswer(!showAnswer)} 
-                  className={styles.answerButton}
-                >
-                  {showAnswer ? '정답 숨기기' : '정답 보기'}
-                </button>
+                {/* 버튼 컨테이너 개선 */}
+                <div className={styles.buttonContainer}>
+                  {/* 정답 보기/숨기기 버튼 */}
+                  <button 
+                    onClick={() => setShowAnswer(!showAnswer)} 
+                    className={`${styles.answerButton} ${styles.viewAnswerButton}`}
+                  >
+                    {showAnswer ? '📝 정답 숨기기' : '📝 정답 보기'}
+                  </button>
+                  
+                  {/* 문제 풀기 버튼 - 사용자 답변 여부에 따라 버튼 텍스트 변경 */}
+                  <button 
+                    onClick={handleSolveQuestion} 
+                    className={`${styles.answerButton} ${hasUserAnswer ? styles.retryButton : styles.solveButton}`}
+                  >
+                    {hasUserAnswer ? '🔄 다시 풀기' : '🧩 문제 풀기'}
+                  </button>
+                </div>
                 
                 {/* 정답 섹션 */}
                 {showAnswer && (
