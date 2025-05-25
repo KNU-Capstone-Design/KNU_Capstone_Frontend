@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import styles from './SubscribeForm.module.css';
 import { subscribeAPI } from '../api/subscribe.js';
+import { act } from 'react';
 
 const fields = ['Android', 'iOS', 'Frontend', 'Backend'];
 
@@ -42,7 +43,6 @@ function SubscribeForm({ onCancel }) {
     }, [email]);
 
     const handleSubmit = async() => {
-        //console.log(import.meta.env.REACT_APP_BASEURL);
         const isEmailValid = validateEmail(email);
         const isFieldValid = categories.length > 0;
     
@@ -75,8 +75,12 @@ function SubscribeForm({ onCancel }) {
                 onCancel();
         
             } catch (error) {
-                console.error('에러 발생:', error);
-                alert('서버 요청 중 오류가 발생했습니다.');
+                if (error.response && error.response.status === 409) {
+                    alert('중복된 이메일입니다.');
+                } 
+                else {
+                    alert('구독 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
+                }
             }
         }
     };
