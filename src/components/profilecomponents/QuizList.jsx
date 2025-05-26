@@ -1,5 +1,3 @@
-// src/pages/QuizList.jsx
-
 import React, { useState, useEffect, useCallback, useMemo } from 'react';
 import styles from './QuizList.module.css';
 import ProfileButton from './ProfileButton';
@@ -257,8 +255,12 @@ export default function QuizList() {
       <div className={styles.header}>
         <div className={styles.userInfo}>
           {/* 이메일 정보 표시 - 없으면 대체 텍스트 */}
-          <span className={styles.email}>{userEmail || ""}</span>
-          <span className={styles.welcomeText}>님 <span className={styles.highlight}>{streakDays}</span>일째 면도 중입니다.</span>
+          <p>
+            <span className={styles.email}>{userEmail || ""}</span>
+            <span className={styles.welcomeText}>님 </span>
+            <span className={styles.highlight}>{streakDays}</span>
+            <span className={styles.welcomeText}>일째 면도 중입니다.</span>
+          </p>
         </div>
       
         <div className={styles.profileButtonWrapper}>
