@@ -17,13 +17,13 @@ jobs:
     - name: SSH into Azure VM and deploy frontend
       uses: appleboy/ssh-action@v0.1.3
       with:
-        host: ${{ secrets.AZURE_VM_IP }}
-        username: ${{ secrets.AZURE_USER }}
-        key: ${{ secrets.AZURE_SSH_KEY }}
+        host: ${{ secrets.VM_IP }}
+        username: ${{ secrets.VM_USER }}
+        key: ${{ secrets.VM_SSH_KEY }}
         script: |
-          cd ~/KNU_Capstone_Frontend
+          cd ~/KNU_Capstone_Design/KNU_Capstone_Frontend
           git pull origin main
           npm install
           npm run build
-          cd ~
+          cd ..
           docker-compose up -d nginx
