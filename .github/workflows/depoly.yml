@@ -20,6 +20,7 @@ jobs:
         host: ${{ secrets.VM_IP }}
         username: ${{ secrets.VM_USER }}
         key: ${{ secrets.VM_SSH_KEY }}
+        port: '2222'
         script: |
           cd ~/KNU_Capstone_Design/KNU_Capstone_Frontend
           git pull origin main
