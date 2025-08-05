@@ -1,108 +1,198 @@
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px) scale(0.95);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
 .overlay {
-  position: fixed;
-  top: 100px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background-color: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backdrop-filter: blur(8px);
 }
 
 .formContainer {
-  background: white;
-  padding: 20px;
-  border-radius: 10px;
-  width: 400px;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%);
+    padding: 40px 45px;
+    border-radius: 20px;
+    width: 550px;
+    max-width: 90vw;
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 8px 16px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1px solid rgba(255, 255, 255, 0.8);
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+}
+
+.formHeader {
+    text-align: center;
+    margin-bottom: 35px;
+}
+
+.formTitle {
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: #1a202c;
+    margin: 0 0 12px 0;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+}
+
+.formDescription {
+    font-size: 1.1rem;
+    color: #4a5568;
+    margin: 0;
+    line-height: 1.5;
+    font-weight: 400;
 }
 
 .emailContainer {
-  margin: 20px;
+    margin-bottom: 28px;
 }
+
 .emailLabel {
-  font-weight: bold;
-  margin-bottom: 8px;
-  display: block;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2d3748;
+    margin-bottom: 10px;
+    display: block;
+    letter-spacing: -0.01em;
 }
+
 .emailInput {
-  width: 100%;
-  height: 30px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 14px;
+    width: 100%;
+    height: 52px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    font-size: 1.1rem;
+    padding: 0 18px;
+    transition: all 0.3s ease;
+    background: white;
+    font-family: inherit;
+}
+
+.emailInput:focus {
+    border-color: #5B9CFE;
+    box-shadow: 0 0 0 4px rgba(91, 156, 254, 0.15);
+    outline: none;
+    background: #fafbfc;
 }
 
 .emailError {
-  color: red;
-  font-size: 13px;
-  margin-top: 4px;
+    color: #e53e3e;
+    font-size: 0.9rem;
+    margin-top: 8px;
+    font-weight: 500;
 }
 
-
 .fieldContainer {
-  margin: 20px;
+    margin-bottom: 32px;
 }
 
 .fieldLabel {
-  font-weight: bold;
-  margin-bottom: 8px;
-  display: block;
+    font-weight: 600;
+    font-size: 1rem;
+    color: #2d3748;
+    margin-bottom: 14px;
+    display: block;
+    letter-spacing: -0.01em;
 }
 
 .fieldSelect {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
 }
 
 .fieldBtn {
-  padding: 10px;
-  border: 1px solid #5B9CFE;
-  border-radius: 8px;
-  background: white;
-  color: #5B9CFE;
-  font-weight: 500;
-  cursor: pointer;
-  transition: transform 0.2s ease-in-out, background-color 0.2s, color 0.2s;
+    padding: 14px 16px;
+    border: 2px solid #e2e8f0;
+    border-radius: 12px;
+    background: white;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
 }
 
 .fieldBtn:hover {
-  transform: scale(1.05);
+    transform: translateY(-2px);
+    border-color: #5B9CFE;
+    color: #5B9CFE;
+    box-shadow: 0 4px 12px rgba(91, 156, 254, 0.15);
 }
 
 .categories {
-  background-color: #5B9CFE;
-  color: white;
-  font-weight: bold;;
+    background: linear-gradient(135deg, #5B9CFE 0%, #4c8dff 100%);
+    color: white !important;
+    font-weight: 700;
+    border-color: #5B9CFE;
+    box-shadow: 0 4px 12px rgba(91, 156, 254, 0.3);
+}
+
+.categories:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(91, 156, 254, 0.4);
+    color: white !important;
 }
 
 .fieldError {
-  color: red;
-  font-size: 13px;
-  margin-top: 4px;
+    color: #e53e3e;
+    font-size: 0.9rem;
+    margin-top: 10px;
+    font-weight: 500;
 }
 
 .buttonContainer {
-  display: flex;
-  justify-content: flex-end;
-  gap: 10px;
+    display: flex;
+    justify-content: flex-end;
+    gap: 14px;
+    margin-top: 16px;
 }
 
 .checkBtn, .cancelBtn {
-  padding: 10px 16px;
-  border-radius: 6px;
-  border: none;
-  cursor: pointer;
-  background-color: #5B9CFE;
-  color: white;
-  font-weight: bold;
-  transition: background-color 0.2s ease-in-out;
+    padding: 14px 28px;
+    border-radius: 12px;
+    border: none;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.1rem;
+    transition: all 0.2s ease;
+    font-family: inherit;
 }
 
-.checkBtn:hover,
+.checkBtn {
+    background: linear-gradient(135deg, #5B9CFE 0%, #4c8dff 100%);
+    color: white;
+    box-shadow: 0 4px 14px rgba(91, 156, 254, 0.3);
+}
+
+.checkBtn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(91, 156, 254, 0.4);
+}
+
+.cancelBtn {
+    background: #f7fafc;
+    color: #4a5568;
+    border: 2px solid #e2e8f0;
+}
+
 .cancelBtn:hover {
-  background-color: #4286e0;
+    background: #edf2f7;
+    border-color: #cbd5e0;
 }

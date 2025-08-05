@@ -87,10 +87,15 @@ function SubscribeForm({ onCancel }) {
     return (
         <div className={styles.overlay}>
             <div className={styles.formContainer}>
+                <div className={styles.formHeader}>
+                    <h2 className={styles.formTitle}>매일 성장하는 개발자로!</h2>
+                    <p className={styles.formDescription}>관심 분야를 선택하고, 매일 아침 맞춤형 면접 질문을 받아보세요.</p>
+                </div>
+
                 {/* 이메일 입력 */}
                 <div className={styles.emailContainer}>
-                    <label className={styles.emailLabel}>이메일</label>
-                    <input 
+                    <label className={styles.emailLabel}>이메일 주소</label>
+                    <input
                         className={styles.emailInput}
                         title='이메일'
                         type="email"
@@ -103,7 +108,7 @@ function SubscribeForm({ onCancel }) {
 
                 {/* 분야 선택 */}
                 <div className={styles.fieldContainer}>
-                    <label className={styles.fieldLabel}>분야</label>
+                    <label className={styles.fieldLabel}>관심 분야를 선택해주세요 (1개 이상)</label>
                     <div className={styles.fieldSelect}>
                         {fields.map((field) => (
                             <button
@@ -120,7 +125,7 @@ function SubscribeForm({ onCancel }) {
 
                 {/* 확인/취소 버튼 */}
                 <div className={styles.buttonContainer}>
-                    <button className={styles.checkBtn} onClick={handleSubmit}>확인</button>
+                    <button className={styles.checkBtn} onClick={handleSubmit}>구독하기</button>
                     <button className={styles.cancelBtn} onClick={onCancel}>취소</button>
                 </div>
             </div>

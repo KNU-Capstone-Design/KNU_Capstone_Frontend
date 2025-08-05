@@ -14,6 +14,17 @@ function Home() {
     const closeForm = () => setIsFormOpen(false);
 
     useEffect(() => {
+        if (isFormOpen) {
+            document.body.style.overflow = 'hidden';
+        } else {
+            document.body.style.overflow = 'unset';
+        }
+        return () => {
+            document.body.style.overflow = 'unset';
+        };
+    }, [isFormOpen]);
+
+    useEffect(() => {
         const handleScroll = () => {
             const scrollTop = window.scrollY;
             const docHeight = document.documentElement.scrollHeight - window.innerHeight;
