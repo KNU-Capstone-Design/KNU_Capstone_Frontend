@@ -1,0 +1,1 @@
+export const fields = ['Android', 'iOS', 'Frontend', 'Backend', 'Unreal', 'Unity'];

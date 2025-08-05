@@ -2,9 +2,7 @@ import { useState, useEffect } from 'react';
 import styles from '../SubscribeForm.module.css';
 import { subscribeAPI } from '../../api/subscribe.js';
 import { usersAPI } from '../../api/users.js';
-
-// API 응답에 맞게 필드 목록 업데이트
-const fields = ['Android', 'iOS', 'Frontend', 'Backend'];
+import { fields } from "../../const/const.js";
 
 // validateEmail 함수 추가 (함수가 없는 경우)
 const validateEmail = (email) => {

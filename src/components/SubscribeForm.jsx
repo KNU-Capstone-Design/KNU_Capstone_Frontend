@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
 import styles from './SubscribeForm.module.css';
 import { subscribeAPI } from '../api/subscribe.js';
-import { act } from 'react';
+import { fields } from "../const/const.js";
 
-const fields = ['Android', 'iOS', 'Frontend', 'Backend'];
 
 function SubscribeForm({ onCancel }) {
     const [categories, setSelected] = useState([]);
