@@ -1,10 +1,11 @@
 import React, { useRef, useState, useEffect } from 'react';
 import styles from './InputAnswer.module.css';
 
-function InputAnswer({ questionId, onSubmitSuccess, disabled, submitted, onShowSolution }) {
+function InputAnswer({ onSubmitSuccess, disabled }) {
   const [answer, setAnswer] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [submitted, setSubmitted] = useState(false);
   const textareaRef = useRef(null);
 
   useEffect(() => {
@@ -22,12 +23,18 @@ function InputAnswer({ questionId, onSubmitSuccess, disabled, submitted, onShowS
       setLoading(true);
       await onSubmitSuccess(answer);
       setAnswer('');
-    } catch (err) {
+      setSubmitted(true);
+    } catch (error) {
       setError('답변 제출 중 오류가 발생했어요.');
     } finally {
       setLoading(false);
     }
   };
+
+  // 제출 완료 시 컴포넌트 숨기기
+  if (submitted) {
+    return null;
+  }
 
   return (
     <form onSubmit={handleSubmit} className={styles.answerForm}>

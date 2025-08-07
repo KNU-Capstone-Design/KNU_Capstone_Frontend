@@ -9,6 +9,7 @@ function SubscribeForm({ onCancel }) {
     const [email, setEmail] = useState('');
     const [emailError, setEmailError] = useState('');
     const [fieldError, setFieldError] = useState('');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const toggleField = (field) => {
         setSelected((prev) => {
@@ -42,6 +43,10 @@ function SubscribeForm({ onCancel }) {
     }, [email]);
 
     const handleSubmit = async() => {
+        if (isSubmitting) {
+            return;
+        }
+
         const isEmailValid = validateEmail(email);
         const isFieldValid = categories.length > 0;
     
@@ -59,6 +64,7 @@ function SubscribeForm({ onCancel }) {
         
     
         if (isEmailValid && isFieldValid) {
+            setIsSubmitting(true);
             try {
                 const response = await subscribeAPI.subscribe(email, categories);
         
@@ -70,7 +76,6 @@ function SubscribeForm({ onCancel }) {
                     alert('면도를 구독하셨습니다! 구독한 메일로 환영 메일을 보냈습니다!');
                 }
         
-                console.log('제출!', { email, categories });
                 onCancel();
         
             } catch (error) {
@@ -80,6 +85,8 @@ function SubscribeForm({ onCancel }) {
                 else {
                     alert('구독 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
                 }
+            } finally {
+                setIsSubmitting(false);
             }
         }
     };
@@ -99,7 +106,7 @@ function SubscribeForm({ onCancel }) {
                         className={styles.emailInput}
                         title='이메일'
                         type="email"
-                        placeholder='example@google.com'
+                        placeholder='example@gmailc .com'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
@@ -125,8 +132,10 @@ function SubscribeForm({ onCancel }) {
 
                 {/* 확인/취소 버튼 */}
                 <div className={styles.buttonContainer}>
-                    <button className={styles.checkBtn} onClick={handleSubmit}>구독하기</button>
-                    <button className={styles.cancelBtn} onClick={onCancel}>취소</button>
+                    <button className={styles.checkBtn} onClick={handleSubmit} disabled={isSubmitting}>
+                        {isSubmitting ? '처리 중...' : '구독하기'}
+                    </button>
+                    <button className={styles.cancelBtn} onClick={onCancel} disabled={isSubmitting}>취소</button>
                 </div>
             </div>
         </div>

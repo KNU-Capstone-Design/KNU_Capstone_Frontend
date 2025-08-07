@@ -12,36 +12,24 @@ const Verify = () => {
       const redirect = searchParams.get('redirect') || '';
       const questionId = searchParams.get('question');
       
-      console.log('Token:', token);
-      console.log('Redirect path:', redirect);
-      
       if (!token) {
-        console.log('No token found, redirecting to home');
         navigate('/', { replace: true });
         return;
       }
 
       try {
-        console.log('Sending verification request...');
-        const response = await axiosInstance.post('/auth/verify', { token });
-        console.log('Verification response:', response);
-        console.log('Redirecting to:', `/${redirect}`);
-        if(questionId) {
-          console.log('Question ID:', questionId);
-          navigate(`/quiz/${questionId}`, { replace: true });
-          return;
-        }
-        navigate(`/${redirect}`, { replace: true });
-      } catch (error) {
-        console.error('인증 실패:', error);
-        if (error.response) {
-          console.error('Response status:', error.response.status);
-          console.error('Response data:', error.response.data);
-        } else if (error.request) {
-          console.error('No response received:', error.request);
+        await axiosInstance.post('/auth/verify', { token });
+        if (redirect) {
+          if(questionId) {
+            navigate(`/quiz/${questionId}`, { replace: true });
+            return;
+          }
+          navigate(`/${redirect}`, { replace: true });
         } else {
-          console.error('Error message:', error.message);
+          navigate('/', { replace: true });
         }
+      } catch (error) {
+        console.error('Verification failed:', error);
         navigate('/', { replace: true });
       }
     };
