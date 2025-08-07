@@ -106,7 +106,7 @@ function SubscribeForm({ onCancel }) {
                         className={styles.emailInput}
                         title='이메일'
                         type="email"
-                        placeholder='example@gmailc .com'
+                        placeholder='example@gmail.com'
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                     />
