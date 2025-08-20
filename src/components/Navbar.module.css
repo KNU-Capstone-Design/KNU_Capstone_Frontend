@@ -1,8 +1,8 @@
 .navbar {
     position: fixed;
-    top: 0px;
+    top: 0;
     width: 100%;
-    height: 100px;
+    height: 80px;
     background-color: white;
     backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(102, 126, 234, 0.1);
@@ -23,10 +23,36 @@
   .logoContainer {
     display: flex;
     align-items: center;
+    height: 100%;
   }
-  
+
+  .logoButton {
+    background: none;
+    border: none;
+    padding: 8px; /* 패딩 추가로 클릭 영역 확대 */
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    transition: transform 0.2s ease;
+    border-radius: 8px; /* 둥근 모서리 추가 */
+  }
+
+  .logoButton:hover {
+    transform: scale(1.05);
+    background-color: rgba(102, 126, 234, 0.05); /* 호버 시 배경색 추가 */
+  }
+
+  .logoButton:focus {
+    outline: 2px solid rgba(102, 126, 234, 0.3);
+    outline-offset: 2px;
+    border-radius: 8px;
+  }
+
   .logoImage {
-    height: 80px;
+    height: 65px;
+    width: auto;
     object-fit: contain;
   }
   
