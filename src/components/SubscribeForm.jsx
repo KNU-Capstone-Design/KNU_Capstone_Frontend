@@ -67,21 +67,18 @@ function SubscribeForm({ onCancel }) {
             setIsSubmitting(true);
             try {
                 const response = await subscribeAPI.subscribe(email, categories);
-        
-                if (response.status === 409 || response.status === 400) {
-                    alert(response.data); // 또는 response.data.message 등 응답 구조에 맞게
-                } else if (response.status === 500) {
-                    alert(response.data);
-                } else {
+                if(response.status === 200) {
                     alert('면도를 구독하셨습니다! 구독한 메일로 환영 메일을 보냈습니다!');
+                    onCancel();
                 }
-        
-                onCancel();
         
             } catch (error) {
                 if (error.response && error.response.status === 409) {
                     alert('중복된 이메일입니다.');
-                } 
+                }
+                else if (error.response.status === 400) {
+                    alert('유효하지 않은 이메일 입니다.');
+                }
                 else {
                     alert('구독 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
                 }
