@@ -56,6 +56,8 @@ function Home() {
 
     return (
         <div className={styles.pageWrapper}>
+            {isFormOpen && <SubscribeForm onCancel={closeForm} />}
+
             {/* Custom Scroll Indicator */}
             <div className={styles.scrollIndicator}>
                 <div className={styles.scrollTrack}>
@@ -125,7 +127,7 @@ function Home() {
                                     </div>
                                 </div>
                             </div>
-                            {isFormOpen && <SubscribeForm onCancel={closeForm} />}
+                            {/* {isFormOpen && <SubscribeForm onCancel={closeForm} />} */}
                         </div>
 
                         <div className={styles.heroImage}>
