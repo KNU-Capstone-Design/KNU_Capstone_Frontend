@@ -68,7 +68,7 @@ function SubscribeForm({ onCancel }) {
             try {
                 const response = await subscribeAPI.subscribe(email, categories);
         
-                if (response.status === 409) {
+                if (response.status === 409 || response.status === 400) {
                     alert(response.data); // 또는 response.data.message 등 응답 구조에 맞게
                 } else if (response.status === 500) {
                     alert(response.data);
