@@ -49,14 +49,7 @@ function Quiz() {
     try {
       setShowAnswer(true);
       const res = await answerAPI.getAnswer(questionId);
-      // API가 전체 결과를 answer 필드에 JSON 문자열로 보낼 경우 파싱
-      const apiData = res.data;
-      const parsedData =
-        typeof apiData.answer === 'string' &&
-        apiData.answer.trim().startsWith('{')
-          ? JSON.parse(apiData.answer)
-          : apiData;
-      setAnswerData(parsedData);
+      setAnswerData(res.data);
 
       setTimeout(() => {
         answerRef.current?.scrollIntoView({ behavior: 'smooth' });
